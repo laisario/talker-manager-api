@@ -1,6 +1,14 @@
 const express = require('express');
 const path = require('path');
 const readFile = require('../utills/readFile');
+const writeFile = require('../utills/writeFile');
+const {
+  validateName,
+  validateAge,
+  validateTalk,
+  validateWatchedAt,
+  validateRate,
+} = require('../middlewares/talkerVerification');
 
 // const talkersJSON = `${__dirname}/./talker.json`;
 const TALKER_FILE = path.join(__dirname, '..', 'talker.json');
@@ -23,6 +31,23 @@ router.get('/:id', async (req, res) => {
     }); 
   }
   return res.status(200).json(talkerById);
+});
+
+router.post('/', 
+    // validateName,
+    // validateAge, 
+    // validateTalk, 
+    // validateWatchedAt, 
+    // validateRate, 
+    async (req, res) => {
+       // const { authorization } = req.header;
+      const data = req.body;
+      const newTalkerId = data.id;
+      await writeFile(TALKER_FILE, data);
+      const talkers = await readFile(TALKER_FILE);
+      const newTalker = talkers.find(({ id }) => id === newTalkerId);
+      
+      return res.status(201).json(newTalker);
 });
 
 module.exports = router;
