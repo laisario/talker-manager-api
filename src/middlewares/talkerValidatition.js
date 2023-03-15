@@ -33,10 +33,10 @@ const validateTalk = (req, res, next) => {
 };
 
 const validateWatchedAt = (req, res, next) => {
-  const { watchedAt } = req.body;
-  const isWatchedAtOk = watchedAt && /^[0-9]{1,2}\/[0-9]{1,2}\/[0-9]{4}$/.test(watchedAt);
+  const { talk: { watchedAt } } = req.body;
+  const isWatchedAtOk = /^[0-9]{1,2}\/[0-9]{1,2}\/[0-9]{4}$/.test(watchedAt);
   if (!watchedAt) {
-    return res.status(400).json({ message: 'O campo "WatchedAt" é obrigatório' }); 
+    return res.status(400).json({ message: 'O campo "watchedAt" é obrigatório' }); 
   }
   if (!isWatchedAtOk) {
     return res.status(400)
@@ -46,22 +46,35 @@ const validateWatchedAt = (req, res, next) => {
 };
 
 const validateRate = (req, res, next) => {
-  const { rate } = req.body;
-  const isRateOk = Number.isInteger(rate) && rate >= 1 && rate <= 5;
+  const { talk: { rate } } = req.body;
+  const isRateNumberRight = rate < 1 || rate > 5;
+  console.log(isRateNumberRight);
+  if (isRateNumberRight) {
+    return res.status(400)
+      .json({ message: 'O campo "rate" deve ser um número inteiro entre 1 e 5' }); 
+  }
   if (!rate) {
     return res.status(400).json({ message: 'O campo "rate" é obrigatório' }); 
   }
-  if (!isRateOk) {
+
+  next();
+};
+
+const validateRate2 = (req, res, next) => {
+  const { talk: { rate } } = req.body;
+  const isRateInt = Number.isInteger(rate);
+
+  if (!isRateInt) {
     return res.status(400)
       .json({ message: 'O campo "rate" deve ser um número inteiro entre 1 e 5' }); 
   }
   next();
 };
 
-module.esports = {
-  validateName,
+module.exports = { 
+  validateName, 
   validateAge,
-  validateTalk,
-  validateWatchedAt,
-  validateRate,
-};
+  validateTalk, 
+  validateWatchedAt, 
+  validateRate, 
+  validateRate2 };

@@ -2,15 +2,16 @@ const express = require('express');
 const path = require('path');
 const readFile = require('../utills/readFile');
 const writeFile = require('../utills/writeFile');
-const {
+const { 
   validateName,
-  validateAge,
-  validateTalk,
+  validateAge, 
+  validateTalk, 
   validateWatchedAt,
   validateRate,
-} = require('../middlewares/talkerVerification');
+  validateRate2,
+} = require('../middlewares/talkerValidatition');
+const validateToken = require('../middlewares/tokenValidatition');
 
-// const talkersJSON = `${__dirname}/./talker.json`;
 const TALKER_FILE = path.join(__dirname, '..', 'talker.json');
 
 const router = express.Router();
@@ -33,21 +34,25 @@ router.get('/:id', async (req, res) => {
   return res.status(200).json(talkerById);
 });
 
-router.post('/', 
-    // validateName,
-    // validateAge, 
-    // validateTalk, 
-    // validateWatchedAt, 
-    // validateRate, 
-    async (req, res) => {
-       // const { authorization } = req.header;
-      const data = req.body;
-      const newTalkerId = data.id;
-      await writeFile(TALKER_FILE, data);
-      const talkers = await readFile(TALKER_FILE);
-      const newTalker = talkers.find(({ id }) => id === newTalkerId);
+router.post('/',
+  validateToken,
+  validateName,
+  validateAge,
+  validateTalk, 
+  validateWatchedAt, 
+  validateRate,
+  validateRate2,
+  async (req, res) => {
+  const { name, age, talk } = req.body;
+  const talkers = await readFile(TALKER_FILE);
+  if (!talkers) return res.status(200).json([]);
+  
+  const newTalker = { id: talkers.length + 1, name, age, talk };
+  talkers.push(newTalker);
+
+  await writeFile(TALKER_FILE, talkers);
       
-      return res.status(201).json(newTalker);
+  return res.status(201).json(newTalker);
 });
 
 module.exports = router;

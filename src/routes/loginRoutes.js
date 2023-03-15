@@ -5,8 +5,8 @@ const { validateEmail, validatePassword } = require('../middlewares/loginVerific
 
 router.post('/', validateEmail, validatePassword, async (req, res) => {
   const { email, password } = req.body;
-  const token = Math.random().toString().substring(2);
-  console.log(token);
+  const generateToken = Math.random().toString(36).substring(2);
+  const token = (generateToken + generateToken).slice(1, 17);
   
   if (email && password) {
     return res.status(200).json({ token });
