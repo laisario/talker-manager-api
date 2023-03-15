@@ -1,9 +1,9 @@
 const express = require('express');
 
 const router = express.Router();
-const validateLogin = require('../middlewares/loginVerification');
+const { validateEmail, validatePassword } = require('../middlewares/loginVerification');
 
-router.post('/', validateLogin, async (req, res) => {
+router.post('/', validateEmail, validatePassword, async (req, res) => {
   const { email, password } = req.body;
   const token = Math.random().toString().substring(2);
   console.log(token);
