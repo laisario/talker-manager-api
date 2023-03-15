@@ -1,9 +1,9 @@
 const express = require('express');
-// const randomToken = require('crypto-random-string');
 
 const router = express.Router();
+const validateLogin = require('../middlewares/loginVerification');
 
-router.post('/', async (req, res) => {
+router.post('/', validateLogin, async (req, res) => {
   const { email, password } = req.body;
   const token = Math.random().toString().substring(2);
   console.log(token);
