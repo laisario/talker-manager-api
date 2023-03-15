@@ -11,5 +11,4 @@ const readFile = async (file) => {
   }
 };
 
-// console.log(readFile(talkersJSON))
 module.exports = readFile;
