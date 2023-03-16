@@ -76,4 +76,14 @@ router.put('/:id',
   return res.status(200).json(talkers[indexOfTalker]);
 });
 
+router.delete('/:id', validateToken, async (req, res) => {
+  const { id } = req.params;
+
+  const talkers = await readFile(TALKER_FILE);
+  const leftTalkers = talkers.filter((talker) => talker.id !== Number(id));
+  console.log(leftTalkers);
+  await writeFile(TALKER_FILE, leftTalkers);
+  return res.status(204).end();
+});
+
 module.exports = router;
