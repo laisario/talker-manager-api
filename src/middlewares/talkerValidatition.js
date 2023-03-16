@@ -69,6 +69,20 @@ const validateRate2 = (req, res, next) => {
   }
   next();
 };
+const path = require('path');
+const readFile = require('../utills/readFile');
+
+const TALKER_FILE = path.join(__dirname, '..', 'talker.json');
+
+const validateId = async (req, res, next) => {
+  const { id } = req.params;
+  const talkers = await readFile(TALKER_FILE);
+  const indexOfTalker = talkers.findIndex((talker) => talker.id === Number(id));
+  if (indexOfTalker === -1) {
+    return res.status(404).json({ message: 'Pessoa palestrante não encontrada' });
+  }
+  next();
+};
 
 module.exports = { 
   validateName, 
@@ -77,4 +91,5 @@ module.exports = {
   validateWatchedAt, 
   validateRate, 
   validateRate2,
+  validateId,
  };

@@ -9,6 +9,7 @@ const {
   validateWatchedAt,
   validateRate,
   validateRate2,
+  validateId,
 } = require('../middlewares/talkerValidatition');
 const validateToken = require('../middlewares/tokenValidatition');
 
@@ -63,18 +64,16 @@ router.put('/:id',
   validateWatchedAt, 
   validateRate,
   validateRate2,
+  validateId,
   async (req, res) => {
   const { id } = req.params;
   const { name, age, talk } = req.body;
   const talkers = await readFile(TALKER_FILE);
   const indexOfTalker = talkers.findIndex((talker) => talker.id === Number(id));
-  if (indexOfTalker === -1) {
-    return res.status(404).json({ message: 'Pessoa palestrante não encontrada' });
-  }
   // o + na frente do id é pra transformar em número
   talkers[indexOfTalker] = { id: +id, name, age, talk };
   await writeFile(TALKER_FILE, talkers);
-  res.status(200).json(talkers[indexOfTalker]);
+  return res.status(200).json(talkers[indexOfTalker]);
 });
 
 module.exports = router;
