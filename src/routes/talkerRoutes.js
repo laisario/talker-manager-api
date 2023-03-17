@@ -10,8 +10,10 @@ const {
   validateRate,
   validateRate2,
   validateId,
+  validateRateQuery,
 } = require('../middlewares/talkerValidatition');
 const validateToken = require('../middlewares/tokenValidatition');
+const filterSearch = require('../middlewares/searchValidatition');
 
 const TALKER_FILE = path.join(__dirname, '..', 'talker.json');
 
@@ -24,13 +26,14 @@ router.get('/', async (req, res) => {
 });
 
 router.get('/search', validateToken, async (req, res) => {
-  const { q } = req.query;
+  const { q, rate } = req.query;
   const talkers = await readFile(TALKER_FILE);
-
-  const search = talkers.filter(({ name }) => name.includes(q));
-  if (search !== []) return res.status(200).json(search);
-  if (search === []) return res.status(200).json([]);
-  if (!q) return res.status(200).json(talkers);
+  const filteredSearch = filterSearch(talkers, q, rate);
+  if (!q && !rate) return res.status(200).json(talkers);
+  if (filteredSearch === []) {
+    return res.status(200).json([]);
+  }
+  return res.status(200).json(filteredSearch);
 });
 
 router.get('/:id', async (req, res) => {
