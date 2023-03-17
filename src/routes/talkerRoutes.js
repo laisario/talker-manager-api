@@ -23,6 +23,16 @@ router.get('/', async (req, res) => {
   return res.status(200).json(talkers);
 });
 
+router.get('/search', validateToken, async (req, res) => {
+  const { q } = req.query;
+  const talkers = await readFile(TALKER_FILE);
+
+  const search = talkers.filter(({ name }) => name.includes(q));
+  if (search !== []) return res.status(200).json(search);
+  if (search === []) return res.status(200).json([]);
+  if (!q) return res.status(200).json(talkers);
+});
+
 router.get('/:id', async (req, res) => {
   const { id } = req.params;
   const talkers = await readFile(TALKER_FILE);
@@ -81,7 +91,6 @@ router.delete('/:id', validateToken, async (req, res) => {
 
   const talkers = await readFile(TALKER_FILE);
   const leftTalkers = talkers.filter((talker) => talker.id !== Number(id));
-  console.log(leftTalkers);
   await writeFile(TALKER_FILE, leftTalkers);
   return res.status(204).end();
 });
