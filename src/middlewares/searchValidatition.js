@@ -1,19 +1,24 @@
+// let filters;
+// if (q && rate) {
+//   filters = talkers
+//   .filter(({ name }) => name.includes(q)).filter(({ talk }) => talk.rate === Number(rate));
+//   return filters;  
+// }
+// if (q) {
+//   filters = talkers.filter(({ name }) => name.includes(q));
+//   return filters;  
+// }
+// if (rate) {
+//   filters = talkers.filter(({ talk }) => talk.rate === Number(rate));
+//   return filters;  
+// }
 const filterSearch = (talkers, q, rate) => {
-  let filters;
-  const searchRate = talkers.filter(({ talk }) => talk.rate === Number(rate));
-  const searchQ = talkers.filter(({ name }) => name.includes(q));
-  const searchAll = searchRate.searchQ;
-  console.log(searchAll);
-  if (q && searchRate) {
-    filters = searchAll;
-  }
-  if (searchRate) {
-    filters = searchRate;
-  }
-  if (q) {
-    filters = searchQ;
-  }
-  return filters;  
+  let filteredTalkers = [...talkers];
+
+    if (q) filteredTalkers = filteredTalkers.filter(({ name }) => name.includes(q));
+    if (rate) filteredTalkers = filteredTalkers.filter(({ talk }) => talk.rate === Number(rate));
+
+    return filteredTalkers;
 };
 
 module.exports = filterSearch;

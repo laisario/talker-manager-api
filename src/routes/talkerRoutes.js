@@ -25,7 +25,7 @@ router.get('/', async (req, res) => {
   return res.status(200).json(talkers);
 });
 
-router.get('/search', validateToken, async (req, res) => {
+router.get('/search', validateToken, validateRateQuery, async (req, res) => {
   const { q, rate } = req.query;
   const talkers = await readFile(TALKER_FILE);
   const filteredSearch = filterSearch(talkers, q, rate);
