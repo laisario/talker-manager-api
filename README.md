@@ -1,10 +1,7 @@
-# :construction: README em construção ! :construction:
-<!-- Olá, Tryber!
-Esse é apenas um arquivo inicial para o README do seu projeto.
-É essencial que você preencha esse documento por conta própria, ok?
-Não deixe de usar nossas dicas de escrita de README de projetos, e deixe sua criatividade brilhar!
-:warning: IMPORTANTE: você precisa deixar nítido:
-- quais arquivos/pastas foram desenvolvidos por você; 
-- quais arquivos/pastas foram desenvolvidos por outra pessoa estudante;
-- quais arquivos/pastas foram desenvolvidos pela Trybe.
--->
+# Talker Manager API
+O "Talker Manager" é uma API desenvolvida com Node.js e Express para gerenciar o cadastro e pesquisa de palestrantes (talkers) para eventos, facilitando o controle de informações sobre esses participantes.
+
+## Funcionalidades
+- Cadastro de Talkers: Permite o cadastro de informações de novos palestrantes.
+- Listagem de Talkers: Fornece uma lista de palestrantes cadastrados.
+- Pesquisa de Talkers: Permite a busca por palestrantes com base em critérios específicos.
